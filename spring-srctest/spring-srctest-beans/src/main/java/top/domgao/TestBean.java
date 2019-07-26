@@ -1,10 +1,7 @@
 package top.domgao;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.*;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author dockerxjbckr
@@ -12,10 +9,17 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class TestBean {
 
+	public static void main(String[] args) {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		MyTestBean bean = (MyTestBean) ctx.getBean("myTestBean");
+		System.err.println("testStr".equals(bean.getTestStr()));
+	}
+
 	@Test
 	public void testGetBean(){
-		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
-		MyTestBean bean = (MyTestBean) beanFactory.getBean("myTestBean");
+
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		MyTestBean bean = (MyTestBean) ctx.getBean("myTestBean");
 		System.err.println("testStr".equals(bean.getTestStr()));
 
 	}
