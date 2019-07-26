@@ -16,8 +16,8 @@ public class TestBean {
 	public void testGetBean(){
 		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
 		MyTestBean bean = (MyTestBean) beanFactory.getBean("myTestBean");
-		Assert.assertEquals("testStr",bean.getTestStr());
-		assertEquals("testStr",bean.getTestStr());
+		System.err.println("testStr".equals(bean.getTestStr()));
+
 	}
 
 }
