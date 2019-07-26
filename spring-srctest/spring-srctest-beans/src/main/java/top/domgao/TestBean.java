@@ -1,7 +1,7 @@
 package top.domgao;
 
-import org.junit.*;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import top.domgao.bean.User;
 
 /**
  * @author dockerxjbckr
@@ -11,17 +11,8 @@ public class TestBean {
 
 	public static void main(String[] args) {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		MyTestBean bean = (MyTestBean) ctx.getBean("myTestBean");
-		System.err.println("testStr".equals(bean.getTestStr()));
-	}
-
-	@Test
-	public void testGetBean(){
-
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		MyTestBean bean = (MyTestBean) ctx.getBean("myTestBean");
-		System.err.println("testStr".equals(bean.getTestStr()));
-
+		User bean = (User) ctx.getBean("user");
+		System.err.println("domgao".equals(bean.getUsername()));
 	}
 
 }
