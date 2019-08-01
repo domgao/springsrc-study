@@ -959,7 +959,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 */
 	protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		//记录当前时间，用于计算web请求的处理时间
 		long startTime = System.currentTimeMillis();
 		Throwable failureCause = null;
 
@@ -975,6 +975,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {
+			/**
+			 * {@linkplain org.springframework.web.servlet.DispatcherServlet#doService(HttpServletRequest req, HttpServletResponse resp) 来处理处理器的逻辑 }.
+			 */
 			doService(request, response);
 		}
 		catch (ServletException | IOException ex) {
