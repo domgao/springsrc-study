@@ -957,17 +957,21 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
+				//request 类型检测是否为 MultipartHttpServletRequest
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				//根据 request 寻找对应的 Handler
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
+					//若未找到 handler 处理器，则通过 response 返回错误信息
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
 				// Determine handler adapter for the current request.
+				//根据 handler 处理器寻找对应的 handlerAdapter 适配器
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -982,7 +986,7 @@ public class DispatcherServlet extends FrameworkServlet {
 						return;
 					}
 				}
-
+				//处理拦截器调用
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
@@ -993,8 +997,9 @@ public class DispatcherServlet extends FrameworkServlet {
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
 				}
-
+				//处理视图名称需要加前后缀的情况
 				applyDefaultViewName(processedRequest, mv);
+				//调用所有拦截器的 postHandler
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
@@ -1065,6 +1070,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Did the handler return a view to render?
+		//如果在 Handler 实例的处理中返回了 ModelAndView ，那么需要做页面处理
 		if (mv != null && !mv.wasCleared()) {
 			render(mv, request, response);
 			if (errorView) {
@@ -1083,6 +1089,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			return;
 		}
 
+		//完成处理后激活触发器，所有拦截器执行完成后的工作
 		if (mappedHandler != null) {
 			mappedHandler.triggerAfterCompletion(request, response, null);
 		}

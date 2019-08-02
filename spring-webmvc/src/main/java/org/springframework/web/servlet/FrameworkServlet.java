@@ -976,7 +976,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		try {
 			/**
-			 * {@linkplain org.springframework.web.servlet.DispatcherServlet#doService(HttpServletRequest req, HttpServletResponse resp) 来处理处理器的逻辑 }.
+			 * {@linkplain org.springframework.web.servlet.DispatcherServlet#doService(HttpServletRequest req, HttpServletResponse resp)
+			 * 来处理请求的逻辑 }.
 			 */
 			doService(request, response);
 		}
