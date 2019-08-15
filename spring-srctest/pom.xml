@@ -8,6 +8,8 @@
 	<version>1.0</version>
 	<modules>
 		<module>spring-srctest-webmvc</module>
+		<module>spring-srctest-beans</module>
+		<module>spring-srctest-tag</module>
 	</modules>
 	<packaging>pom</packaging>
 	<name>spring-srctest</name>
