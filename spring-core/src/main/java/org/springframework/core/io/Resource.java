@@ -48,6 +48,7 @@ import org.springframework.lang.Nullable;
  * @see PathResource
  * @see ByteArrayResource
  * @see InputStreamResource
+ * @see VfsResource
  */
 public interface Resource extends InputStreamSource {
 
