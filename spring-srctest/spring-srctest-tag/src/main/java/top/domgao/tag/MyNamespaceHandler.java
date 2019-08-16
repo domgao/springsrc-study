@@ -8,6 +8,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class MyNamespaceHandler extends NamespaceHandlerSupport {
 	@Override
 	public void init() {
+		System.err.println("I be init...");
 		registerBeanDefinitionParser("user",new UserBeanDefinitionParse());
 	}
 }

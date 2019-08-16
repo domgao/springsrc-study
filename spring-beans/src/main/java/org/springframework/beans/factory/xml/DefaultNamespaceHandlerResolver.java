@@ -115,24 +115,32 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	@Override
 	@Nullable
 	public NamespaceHandler resolve(String namespaceUri) {
+		//获取所有已经配置的 handler 映射
 		Map<String, Object> handlerMappings = getHandlerMappings();
+		//根据命名空间找到对应的信息
 		Object handlerOrClassName = handlerMappings.get(namespaceUri);
 		if (handlerOrClassName == null) {
 			return null;
 		}
 		else if (handlerOrClassName instanceof NamespaceHandler) {
+			//已经做过解析的情况直接从缓存读取
 			return (NamespaceHandler) handlerOrClassName;
 		}
 		else {
+			//未做过解析的返回类路径
 			String className = (String) handlerOrClassName;
 			try {
+				//通过反射获取所在类
 				Class<?> handlerClass = ClassUtils.forName(className, this.classLoader);
 				if (!NamespaceHandler.class.isAssignableFrom(handlerClass)) {
 					throw new FatalBeanException("Class [" + className + "] for namespace [" + namespaceUri +
 							"] does not implement the [" + NamespaceHandler.class.getName() + "] interface");
 				}
+				//初始化类
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
+				//调用自定义的 NamespaceHandler 的初始化方法
 				namespaceHandler.init();
+				//记录在缓存
 				handlerMappings.put(namespaceUri, namespaceHandler);
 				return namespaceHandler;
 			}
@@ -152,17 +160,20 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 */
 	private Map<String, Object> getHandlerMappings() {
 		Map<String, Object> handlerMappings = this.handlerMappings;
+		//如果 Spring.handlers 配置文件没有被缓存则开始进行缓存
 		if (handlerMappings == null) {
 			synchronized (this) {
 				handlerMappings = this.handlerMappings;
 				if (handlerMappings == null) {
 					try {
+						//this.handlerMappingsLocation 在构造函数中已经被初始化为： META-INF/Spring.handlers
 						Properties mappings =
 								PropertiesLoaderUtils.loadAllProperties(this.handlerMappingsLocation, this.classLoader);
 						if (logger.isDebugEnabled()) {
 							logger.debug("Loaded NamespaceHandler mappings: " + mappings);
 						}
 						Map<String, Object> mappingsToUse = new ConcurrentHashMap<>(mappings.size());
+						//将 Properties 格式文件合并到 Map 格式的 handlerMappings 中
 						CollectionUtils.mergePropertiesIntoMap(mappings, mappingsToUse);
 						handlerMappings = mappingsToUse;
 						this.handlerMappings = handlerMappings;
